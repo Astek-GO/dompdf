@@ -16,17 +16,23 @@ PHP_VERSION >= 5.0 or die("DOMPDF requires PHP 5.0+");
 /**
  * The root of your DOMPDF installation
  */
-define("DOMPDF_DIR", str_replace(DIRECTORY_SEPARATOR, '/', realpath(dirname(__FILE__))));
+if (!defined('DOMPDF_DIR')) {
+    define("DOMPDF_DIR", str_replace(DIRECTORY_SEPARATOR, '/', realpath(dirname(__FILE__))));
+}
 
 /**
  * The location of the DOMPDF include directory
  */
-define("DOMPDF_INC_DIR", DOMPDF_DIR . "/include");
+if (!defined('DOMPDF_DIR')) {
+    define("DOMPDF_INC_DIR", DOMPDF_DIR . "/include");
+}
 
 /**
  * The location of the DOMPDF lib directory
  */
-define("DOMPDF_LIB_DIR", DOMPDF_DIR . "/lib");
+if (!defined('DOMPDF_DIR')) {
+    define("DOMPDF_LIB_DIR", DOMPDF_DIR . "/lib");
+}
 
 /**
  * Some installations don't have $_SERVER['DOCUMENT_ROOT']
@@ -34,12 +40,12 @@ define("DOMPDF_LIB_DIR", DOMPDF_DIR . "/lib");
  */
 if( !isset($_SERVER['DOCUMENT_ROOT']) ) {
   $path = "";
-  
+
   if ( isset($_SERVER['SCRIPT_FILENAME']) )
     $path = $_SERVER['SCRIPT_FILENAME'];
   elseif ( isset($_SERVER['PATH_TRANSLATED']) )
     $path = str_replace('\\\\', '\\', $_SERVER['PATH_TRANSLATED']);
-    
+
   $_SERVER['DOCUMENT_ROOT'] = str_replace( '\\', '/', substr($path, 0, 0-strlen($_SERVER['PHP_SELF'])));
 }
 
@@ -115,7 +121,7 @@ def("DOMPDF_TEMP_DIR", sys_get_temp_dir());
  * should be an absolute path.
  * This is only checked on command line call by dompdf.php, but not by
  * direct class use like:
- * $dompdf = new DOMPDF();	$dompdf->load_html($htmldata); $dompdf->render(); $pdfdata = $dompdf->output();
+ * $dompdf = new DOMPDF();  $dompdf->load_html($htmldata); $dompdf->render(); $pdfdata = $dompdf->output();
  */
 def("DOMPDF_CHROOT", realpath(DOMPDF_DIR));
 
@@ -332,7 +338,6 @@ require_once(DOMPDF_LIB_DIR . "/html5lib/Parser.php");
  */
 if (DOMPDF_ENABLE_AUTOLOAD) {
   require_once(DOMPDF_INC_DIR . "/autoload.inc.php");
-  require_once(DOMPDF_LIB_DIR . "/php-font-lib/classes/font.cls.php");
 }
 
 /**
